@@ -7,22 +7,31 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
-
-//IMPORTAMOS GEOLOCATION Y GEOCODER
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireDatabase, AngularFireDatabaseModule } from '@angular/fire/database';
+import { AngularFireAuth, AngularFireAuthModule } from '@angular/fire/auth';
+import { environment } from '../environments/environment';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
-
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
-  providers: [
-    //AÑADIMOS GEOLOCATION Y GEOCODER
-    Geolocation,    
-    NativeGeocoder,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+  imports: [
+    AngularFireAuthModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireDatabaseModule,
+    BrowserModule,
+    IonicModule.forRoot(),
+    AppRoutingModule
   ],
-  bootstrap: [AppComponent]
+  providers: [
+    Geolocation, NativeGeocoder,
+    { 
+      provide: RouteReuseStrategy, 
+      useClass: IonicRouteStrategy 
+    }
+  ],
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

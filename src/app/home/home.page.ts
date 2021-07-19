@@ -1,5 +1,7 @@
 //IMPORTAR LOS MODULOS NECESARIOS PARA LAS FUNCIONES.
 
+import { ConectionService } from '../services/conection.service';
+
 import { Component, OnInit, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
@@ -12,7 +14,7 @@ declare var google;
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements OnInit {
-  
+ 
   @ViewChild('map',  {static: false}) mapElement: ElementRef;
   map: any;
   address:string;
@@ -23,11 +25,11 @@ export class HomePage implements OnInit {
   location: any;
   placeid: any;
   GoogleAutocomplete: any;
-
  
   constructor(
     private geolocation: Geolocation,
-    private nativeGeocoder: NativeGeocoder,    
+    private nativeGeocoder: NativeGeocoder,
+    private conectionService: ConectionService,   
     public zone: NgZone,
   ) {
     this.GoogleAutocomplete = new google.maps.places.AutocompleteService();
@@ -51,7 +53,6 @@ export class HomePage implements OnInit {
         zoom: 15,
         mapTypeId: google.maps.MapTypeId.ROADMAP
       } 
-      
       //CUANDO TENEMOS LAS COORDENADAS SIMPLEMENTE NECESITAMOS PASAR AL MAPA DE GOOGLE TODOS LOS PARAMETROS.
       this.getAddressFromCoords(resp.coords.latitude, resp.coords.longitude); 
       this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions); 
@@ -63,10 +64,9 @@ export class HomePage implements OnInit {
       }); 
     }).catch((error) => {
       console.log('Error getting location', error);
-    });
+    });   
   }
 
-  
   getAddressFromCoords(lattitude, longitude) {
     console.log("getAddressFromCoords "+lattitude+" "+longitude);
     let options: NativeGeocoderOptions = {
@@ -94,23 +94,12 @@ export class HomePage implements OnInit {
 
   //FUNCION DEL BOTON INFERIOR PARA QUE NOS DIGA LAS COORDENADAS DEL LUGAR EN EL QUE POSICIONAMOS EL PIN.
   ShowCords(){
-    alert('lat' +this.lat+', long'+this.long )
-  }
-  
-  //AUTOCOMPLETE, SIMPLEMENTE ACTUALIZAMOS LA LISTA CON CADA EVENTO DE ION CHANGE EN LA VISTA.
-  UpdateSearchResults(){
-    if (this.autocomplete.input == '') {
-      this.autocompleteItems = [];
-      return;
-    }
-    this.GoogleAutocomplete.getPlacePredictions({ input: this.autocomplete.input },
-    (predictions, status) => {
-      this.autocompleteItems = [];
-      this.zone.run(() => {
-        predictions.forEach((prediction) => {
-          this.autocompleteItems.push(prediction);
-        });
-      });
+    alert('Las cordenadas de su ubicación son:\nLatitud: ' +this.lat+'\nLongitud: '+this.long );
+    this.conectionService.registerGeo(this.lat, this.long)
+    .then(()=>{
+      alert('Coordenadas guardadas correctamente');
+    }).catch((err)=>{
+      console.log(err);
     });
   }
   
