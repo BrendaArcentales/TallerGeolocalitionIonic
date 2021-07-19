@@ -5,14 +5,13 @@
 export const environment = {
   production: false,
   firebaseConfig :{
-    apiKey: "AIzaSyBED7AIsVSVgGK4GhDcLLGc5Kqh_n_4vJ0",
-    authDomain: "tallergeolocation.firebaseapp.com",
-    projectId: "tallergeolocation",
-    storageBucket: "tallergeolocation.appspot.com",
-    messagingSenderId: "1024712796242",
-    appId: "1:1024712796242:web:94e9d225bfc86b73ffd78b",
-    measurementId: "G-24ERBYGD1S"
-   
+    apiKey: "aqui va el key de firebase",
+    authDomain: "aqui va el key de firebase",
+    projectId: "aqui va el key de firebase",
+    storageBucket: "aqui va el key de firebase",
+    messagingSenderId: "aqui va el key de firebase",
+    appId: "aqui va el key de firebase",
+    measurementId: "aqui va el key de firebase"
   }
 };
 
